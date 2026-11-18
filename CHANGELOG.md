@@ -26,11 +26,19 @@ repository joins the suite at the suite's version, never at `0.0.1`
 - The repository standard: the `make check` gate, CI on Linux, Windows
   and macOS, CodeQL, OpenSSF Scorecard, DCO and docs-lint workflows,
   Dependabot, and the community and policy documents.
+- The release workflow (`.github/workflows/release.yml`) for a pushed
+  `v<version>` tag: `scripts/verify-release-tag` refuses a tag that is
+  not annotated, not signed by a key in `KEYS.asc`, not on the released
+  commit, or not named and worded for the csproj version; then
+  `make check`, the package and its symbols package, a CycloneDX SBOM,
+  `SHA256SUMS`, SLSA build provenance, NuGet trusted publishing behind
+  the `nuget` environment, and a draft GitHub release. Nothing has been
+  published with it yet.
+- A symbols package (`Jspassgen.<version>.snupkg`) beside the `.nupkg`.
 
 ### Not yet
 
 - The password generators, validation and entropy calculation, the
   vendored conformance kit (`conformance/`, `ci/core.ref`), examples,
-  benchmarks, fuzzing, the rendered manual, the demo and the release
-  workflow. They arrive before `0.0.22` is tagged; the version is not
+  benchmarks, fuzzing, the rendered manual and the demo. They arrive before `0.0.22` is tagged; the version is not
   released without them.

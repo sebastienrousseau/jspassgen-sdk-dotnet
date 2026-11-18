@@ -75,13 +75,58 @@ because today they would have nothing to run: `conformance/` and
 `ci/core.ref` (the kit ships in jspassgen 0.0.21 and is vendored with
 the first generator), `examples/`, `benchmarks/`,
 `fuzz/` (the library parses no input), the rendered manual and its
-deploy workflow, `.github/demo.tape` and `demo.gif`, and the release
-workflow.
+deploy workflow, and `.github/demo.tape` and `demo.gif`.
 
 ## Release model
 
 The version is `0.0.x` and moves by `0.0.1` on `feat/v<next-version>`,
 the only pull request into `main`. This repository joins the suite at
-`0.0.22`. The release workflow (signed-tag verification, pack, SBOM,
-`SHA256SUMS`, provenance, NuGet trusted publishing) is added before the
-first tag; until then nothing is published.
+`0.0.22`. `.github/workflows/release.yml` releases a pushed
+`v<version>` tag; nothing has been published yet.
+
+1. On `feat/v<version>`: move `<Version>` in
+   `src/Jspassgen/Jspassgen.csproj` and its restatements
+   (`make verify-versions` lists them), and date the `CHANGELOG.md`
+   heading. Merge the release pull request into `main` once CI is green.
+2. Tag `main` with a signed annotated tag and check it before pushing:
+
+   ```bash
+   git tag -s v<version> -m "jspassgen-sdk-dotnet v<version>"
+   scripts/verify-release-tag v<version> "$(git rev-parse HEAD)"
+   git push origin v<version>
+   ```
+
+3. The `check` job runs `scripts/verify-release-tag`, which refuses a
+   tag that is lightweight, unsigned, signed by a key not in `KEYS.asc`
+   (OpenSSH allowed signers), not on the checked-out commit, named for
+   another version than the csproj, or whose message is not
+   `jspassgen-sdk-dotnet v<version>`, and a CHANGELOG heading that is
+   still `Unreleased`. It then runs `make check`, which packs
+   `Jspassgen.<version>.nupkg` and its `.snupkg`, writes a CycloneDX
+   SBOM (`Jspassgen.<version>.cdx.json`, the `cyclonedx` tool pinned in
+   `.config/dotnet-tools.json`) and `SHA256SUMS` over the three.
+4. The `attest` job records SLSA build provenance for both packages
+   (`gh attestation verify <file> --repo
+   sebastienrousseau/jspassgen-sdk-dotnet`).
+5. The `publish-nuget` job waits for a maintainer to approve the `nuget`
+   environment, checks the files against `SHA256SUMS`, and pushes the
+   package and its symbols to nuget.org through NuGet trusted
+   publishing: `NuGet/login` exchanges the job's OIDC token for a
+   short-lived API key, so no NuGet key is stored. A version
+   already on nuget.org is skipped, so a rerun is safe; the job then
+   polls until the version is visible.
+6. The `github-release` job drafts the GitHub release
+   `jspassgen-sdk-dotnet <version>` with the packages, the SBOM and
+   `SHA256SUMS`, and notes with What's Changed, the checksums and the
+   Full Changelog line. The maintainer writes the Highlights and
+   publishes the draft.
+
+Set up once, before the first tag:
+
+- the `nuget` environment, with the maintainer as required reviewer and
+  deployments only from `main` and `v*` tags;
+- the `NUGET_USER` repository variable: the nuget.org account that owns
+  `Jspassgen`;
+- on nuget.org, a trusted publishing policy for that account naming the
+  owner `sebastienrousseau`, the repository `jspassgen-sdk-dotnet`, the
+  workflow file `release.yml` and the environment `nuget`.

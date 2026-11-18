@@ -13,7 +13,7 @@ suite release. The order of work follows jspassgen's
 | Vendor the kit (`conformance/`, `ci/core.ref`) and run it in CI | here | Next |
 | Port the generators in `PASSWORD_TYPES`, validation and entropy | here | After the kit is vendored |
 | Examples, benchmarks, demo, rendered manual | here | After the generators |
-| Release workflow and NuGet trusted publishing of `Jspassgen` | here | Before the first tag |
+| Release workflow and NuGet trusted publishing of `Jspassgen` | here | Workflow done (this version); the `nuget` environment and the nuget.org trusted publishing policy before the first tag |
 | First suite release; status `active` in `docs/ecosystem.json` | all members | After every member passes its gate |
 
 Until the last row, `Jspassgen` is not on NuGet and this repository

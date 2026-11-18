@@ -13,8 +13,9 @@
     <IsAotCompatible>true</IsAotCompatible>
 
     <!-- Packed in CI and by `make check` on every change, to keep the
-         package metadata valid. Nothing publishes it yet: there is no
-         release workflow until the first suite release (CHANGELOG). -->
+         package metadata valid. Only the release workflow publishes it
+         (.github/workflows/release.yml, on a signed v<Version> tag);
+         nothing has been published yet. -->
     <IsPackable>true</IsPackable>
     <EnablePackageValidation>true</EnablePackageValidation>
     <PackageId>Jspassgen</PackageId>
@@ -27,6 +28,11 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>password;passphrase;generator;csprng;security</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <!-- A symbols package (.snupkg) beside the .nupkg: the SDK's Source
+         Link already records the commit, so a debugger can step into
+         this source from the published package. -->
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <ItemGroup>
