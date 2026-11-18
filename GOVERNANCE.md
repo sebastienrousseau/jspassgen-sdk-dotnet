@@ -39,9 +39,9 @@ concerned.
 - **Releases**: tags are signed with a key the maintainer publishes in
   `KEYS.asc`; a successor publishes a new key there, in a signed commit,
   before signing a tag with it.
-- **NuGet**: nothing is published yet. The release workflow publishes
-  the package by trusted publishing (OIDC) from the protected `nuget`
-  GitHub environment, so no long-lived API key exists to lose.
+- **NuGet**: the release workflow publishes the package by trusted
+  publishing (OIDC) from the protected `nuget` GitHub environment, so no
+  long-lived API key exists to lose.
 - **GitHub**: a successor is added as an admin of this repository and of
   jspassgen, which owns the conformance kit, before any handover.
 - **Security reports**: GitHub private vulnerability reporting stays on,

@@ -6,13 +6,13 @@ title: "jspassgen-sdk-dotnet: native .NET port of the jspassgen password generat
 abstract: >-
   A native .NET port of the jspassgen password and passphrase generator
   core, drawing every random value from the platform CSPRNG
-  (RandomNumberGenerator) on the caller's machine. Work in progress and
-  unreleased: this version contains the random source only.
+  (RandomNumberGenerator) on the caller's machine. Work in progress:
+  this version contains the random source only.
 authors:
   - family-names: Rousseau
     given-names: Sebastien
-# Unreleased: no date-released until 0.0.22 is tagged.
 version: "0.0.22"
+date-released: 2026-11-18
 # Dual-licensed, at the user's option (LICENSE, LICENSE-APACHE,
 # LICENSE-MIT). CFF 1.2.0 takes SPDX licence identifiers, not an SPDX
 # expression; a list of several means the work is available under any of

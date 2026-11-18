@@ -2,7 +2,7 @@
 
 # AGENTS.md
 
-`jspassgen-sdk-dotnet` is the planned native .NET port of the
+`jspassgen-sdk-dotnet` is the native .NET port of the
 [jspassgen](https://github.com/sebastienrousseau/jspassgen) password and
 passphrase core (`packages/core`), one member of the jspassgen suite
 ([ADR 0001 in jspassgen](https://github.com/sebastienrousseau/jspassgen/blob/main/docs/adr/0001-ecosystem-lockstep.md)).
@@ -17,8 +17,8 @@ change is most likely to break; humans follow them too. Read
 
 - The version is `0.0.x` and moves strictly by `0.0.1`, in lockstep
   with the jspassgen suite. Never propose a `0.1.0` or `1.0` jump, and
-  never bump it as a side effect of a change. `0.0.22` is the planned
-  first suite version; this repository has never been released.
+  never bump it as a side effect of a change. `0.0.22` is the first
+  suite version and this repository's first release.
 - `<Version>` in `src/Jspassgen/Jspassgen.csproj` is the single source
   of truth; `CITATION.cff`, the `CHANGELOG.md` heading, the
   `SECURITY.md` and `SUPPORT.md` tables, the README install snippets,

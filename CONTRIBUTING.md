@@ -2,7 +2,7 @@
 
 # Contributing
 
-This repository is the planned native .NET port of the
+This repository is the native .NET port of the
 [jspassgen](https://github.com/sebastienrousseau/jspassgen) core. It
 holds only the random source today; the generators are ported once
 jspassgen's conformance kit exists. Read [AGENTS.md](AGENTS.md) for the
