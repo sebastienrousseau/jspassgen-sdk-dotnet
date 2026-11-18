@@ -7,8 +7,8 @@ A planned native .NET port of the
 passphrase generator. Every random value comes from the platform CSPRNG
 on the caller's machine; nothing is sent over the network. Today the
 library holds only the random source, `IRandomSource` and
-`CryptoRandomSource`; the generators are ported once jspassgen's
-conformance kit exists.
+`CryptoRandomSource`; the generators are ported against jspassgen's
+conformance kit, which jspassgen has shipped since 0.0.21.
 
 ## In this manual
 
