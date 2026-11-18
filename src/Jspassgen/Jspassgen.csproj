@@ -1,0 +1,35 @@
+<!-- SPDX-License-Identifier: Apache-2.0 OR MIT -->
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>Jspassgen</RootNamespace>
+    <AssemblyName>Jspassgen</AssemblyName>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <Deterministic>true</Deterministic>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IsTrimmable>true</IsTrimmable>
+    <IsAotCompatible>true</IsAotCompatible>
+
+    <!-- Packed in CI and by `make check` on every change, to keep the
+         package metadata valid. Nothing publishes it yet: there is no
+         release workflow until the first suite release (CHANGELOG). -->
+    <IsPackable>true</IsPackable>
+    <EnablePackageValidation>true</EnablePackageValidation>
+    <PackageId>Jspassgen</PackageId>
+    <Version>0.0.22</Version>
+    <Authors>Sebastien Rousseau</Authors>
+    <Description>Native .NET port of the jspassgen password generator core, on the platform CSPRNG (RandomNumberGenerator). Work in progress: this version contains the random source only.</Description>
+    <PackageLicenseExpression>Apache-2.0 OR MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/sebastienrousseau/jspassgen-sdk-dotnet</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/sebastienrousseau/jspassgen-sdk-dotnet</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>password;passphrase;generator;csprng;security</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../../README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
+</Project>

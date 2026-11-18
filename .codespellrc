@@ -1,0 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0 OR MIT
+# codespell, as the docs-lint workflow and pre-commit run it.
+[codespell]
+skip = ./.git,./.venv-lint,./.venv-docs,*/bin,*/obj,./artifacts,./site,./docs/api,*.lock.json,./ci/*.txt,./LICENSES,./LICENSE-APACHE
+check-hidden = true

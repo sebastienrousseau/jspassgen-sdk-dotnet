@@ -1,0 +1,22 @@
+# .NET build output
+bin/
+obj/
+artifacts/
+TestResults/
+*.user
+*.suo
+.vs/
+.idea/
+*.nupkg
+*.snupkg
+dist/
+
+# Tooling
+node_modules/
+.venv/
+.DS_Store
+.venv-lint/
+.venv-docs/
+site/
+docs/api/
+__pycache__/

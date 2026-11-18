@@ -1,0 +1,6 @@
+# SPDX-License-Identifier: Apache-2.0 OR MIT
+# The toolchain, pinned: `mise install` gives the .NET SDK global.json
+# names, and Node 24 for markdownlint.
+[tools]
+dotnet = "10.0.404"
+node = "24"
