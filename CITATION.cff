@@ -1,0 +1,30 @@
+# SPDX-License-Identifier: Apache-2.0 OR MIT
+cff-version: 1.2.0
+message: "If you use jspassgen-sdk-dotnet in research or production write-ups, please cite it as below."
+type: software
+title: "jspassgen-sdk-dotnet: native .NET port of the jspassgen password generator"
+abstract: >-
+  A native .NET port of the jspassgen password and passphrase generator
+  core, drawing every random value from the platform CSPRNG
+  (RandomNumberGenerator) on the caller's machine. Work in progress and
+  unreleased: this version contains the random source only.
+authors:
+  - family-names: Rousseau
+    given-names: Sebastien
+# Unreleased: no date-released until 0.0.22 is tagged.
+version: "0.0.22"
+# Dual-licensed, at the user's option (LICENSE, LICENSE-APACHE,
+# LICENSE-MIT). CFF 1.2.0 takes SPDX licence identifiers, not an SPDX
+# expression; a list of several means the work is available under any of
+# them.
+license:
+  - Apache-2.0
+  - MIT
+repository-code: "https://github.com/sebastienrousseau/jspassgen-sdk-dotnet"
+keywords:
+  - password
+  - passphrase
+  - generator
+  - CSPRNG
+  - .NET
+  - SDK

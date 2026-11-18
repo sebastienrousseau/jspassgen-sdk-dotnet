@@ -1,0 +1,20 @@
+<!-- SPDX-License-Identifier: Apache-2.0 OR MIT -->
+
+# Roadmap
+
+The current version is `0.0.22`, unreleased: the planned first jspassgen
+suite release. The order of work follows jspassgen's
+[ADR 0001](https://github.com/sebastienrousseau/jspassgen/blob/main/docs/adr/0001-ecosystem-lockstep.md).
+
+| Step | Where | Status |
+| :--- | :--- | :--- |
+| Repository scaffold, gate and CI; the random source | here | Done (this version) |
+| Conformance kit generator and kit | jspassgen | Not started here; tracked in jspassgen |
+| Vendor the kit (`conformance/`, `ci/core.ref`) and run it in CI | here | Waiting for the kit |
+| Port the generators in `PASSWORD_TYPES`, validation and entropy | here | Waiting for the kit |
+| Examples, benchmarks, demo, rendered manual | here | After the generators |
+| Release workflow and NuGet trusted publishing of `Jspassgen` | here | Before the first tag |
+| First suite release; status `active` in `docs/ecosystem.json` | all members | After every member passes its gate |
+
+Until the last row, `Jspassgen` is not on NuGet and this repository
+generates no passwords.

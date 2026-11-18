@@ -1,0 +1,60 @@
+# SPDX-License-Identifier: Apache-2.0 OR MIT
+#
+# Cheap checks on prose and licensing: markdownlint, codespell, and
+# REUSE (every file carries machine-readable licence and copyright).
+# Reproduce with `make docs-lint`.
+name: Docs lint
+
+on:
+  push:
+    branches: [main, "feat/*"]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docs-lint-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  markdownlint:
+    name: markdownlint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "22"
+
+      - name: Markdown style (markdownlint-cli2)
+        run: npx --yes markdownlint-cli2@0.23.3 "**/*.md"
+
+  codespell-reuse:
+    name: codespell and REUSE
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+
+      - name: Install the pinned tools (hash-checked)
+        run: |
+          python -m venv "$RUNNER_TEMP/lint"
+          "$RUNNER_TEMP/lint/bin/pip" install --require-hashes --no-deps -r ci/lint-requirements.txt
+
+      - name: Spelling (codespell)
+        run: '"$RUNNER_TEMP/lint/bin/codespell"'
+
+      - name: Licensing (reuse lint)
+        run: '"$RUNNER_TEMP/lint/bin/reuse" lint'

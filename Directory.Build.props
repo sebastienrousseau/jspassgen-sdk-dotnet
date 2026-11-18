@@ -1,0 +1,35 @@
+<!-- SPDX-License-Identifier: Apache-2.0 OR MIT -->
+<Project>
+  <!-- Settings every project in the repository shares: the library, the
+       tests and the example are held to the same compiler and analyser
+       gate. -->
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+    <!-- Record every resolved package and its content hash in a
+         packages.lock.json beside each project. -->
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <!-- In CI a restore that would change a lock file fails instead. -->
+    <RestoreLockedMode Condition="'$(CI)' == 'true'">true</RestoreLockedMode>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- CA1502 reads its cyclomatic complexity threshold from here. -->
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)CodeMetricsConfig.txt" />
+    <!-- SonarAnalyzer reads the cognitive complexity and length
+         thresholds from here; .editorconfig turns on only those rules. -->
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)SonarLint.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- A build-time analyser only: never a dependency of the package. -->
+    <PackageReference Include="SonarAnalyzer.CSharp">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+</Project>
