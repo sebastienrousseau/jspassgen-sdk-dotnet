@@ -72,7 +72,8 @@ once in a million runs (uniformity) or less (bias, a six-sigma window).
 
 These parts of the suite standard arrive with the ported generators,
 because today they would have nothing to run: `conformance/` and
-`ci/core.ref` (the kit does not exist yet), `examples/`, `benchmarks/`,
+`ci/core.ref` (the kit ships in jspassgen 0.0.21 and is vendored with
+the first generator), `examples/`, `benchmarks/`,
 `fuzz/` (the library parses no input), the rendered manual and its
 deploy workflow, `.github/demo.tape` and `demo.gif`, and the release
 workflow.
