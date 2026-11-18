@@ -16,7 +16,7 @@
 Open a [GitHub issue](https://github.com/sebastienrousseau/jspassgen-sdk-dotnet/issues/new/choose).
 Include:
 
-- the SDK commit (nothing is published yet) and the .NET SDK version
+- the `Jspassgen` package version or SDK commit, and the .NET SDK version
   (`dotnet --version`);
 - the smallest code that shows the problem;
 - the exception type and message.
@@ -40,7 +40,7 @@ While pre-`1.0`, only the latest `0.0.x` receives fixes.
 
 | Version | Status | Supported |
 | :--- | :--- | :--- |
-| `0.0.22` | Unreleased (planned first release) | Yes, once released |
+| `0.0.22` | Latest release | Yes |
 
 ## Response times
 

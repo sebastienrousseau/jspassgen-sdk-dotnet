@@ -1,0 +1,61 @@
+#!/bin/sh
+# SPDX-License-Identifier: Apache-2.0 OR MIT
+#
+# Fails unless TAG is a releasable tag for the commit SHA. The release
+# workflow's `check` job runs it before anything is built; run it
+# locally before pushing a tag:
+#
+#   scripts/verify-release-tag v0.0.22 "$(git rev-parse HEAD)"
+#
+# TAG must be:
+# - named v<Version>, where <Version> is the csproj's, the one source of
+#   truth;
+# - an annotated tag, never a lightweight one;
+# - one whose message subject is exactly `jspassgen-sdk-dotnet v<Version>`;
+# - signed by a key listed in KEYS.asc (OpenSSH allowed signers);
+# - on SHA, the commit being released.
+# The CHANGELOG heading for <Version> must also carry a date, since the
+# heading says `Unreleased` until release day.
+set -eu
+
+cd "$(dirname "$0")/.."
+
+project=jspassgen-sdk-dotnet
+csproj=src/Jspassgen/Jspassgen.csproj
+
+if [ "$#" -ne 2 ]; then
+  echo "usage: scripts/verify-release-tag <tag> <commit-sha>" >&2
+  exit 2
+fi
+tag=$1
+sha=$2
+
+fail() {
+  printf 'verify-release-tag: %s\n' "$*" >&2
+  exit 1
+}
+
+version=$(sed -n 's:.*<Version>\(.*\)</Version>.*:\1:p' "$csproj")
+[ -n "$version" ] || fail "no <Version> in $csproj"
+[ "$tag" = "v$version" ] || fail "tag $tag does not match the csproj version $version"
+
+git rev-parse -q --verify "refs/tags/$tag" >/dev/null || fail "no tag $tag"
+[ "$(git cat-file -t "refs/tags/$tag")" = tag ] || fail "$tag is not an annotated tag"
+
+subject=$(git for-each-ref --format='%(contents:subject)' "refs/tags/$tag")
+[ "$subject" = "$project v$version" ] ||
+  fail "$tag message is '$subject', expected '$project v$version'"
+
+[ -n "$(git for-each-ref --format='%(contents:signature)' "refs/tags/$tag")" ] ||
+  fail "$tag is not signed"
+git -c gpg.ssh.allowedSignersFile=KEYS.asc verify-tag "$tag" ||
+  fail "$tag is not signed by a key in KEYS.asc"
+
+target=$(git rev-parse "refs/tags/$tag^{commit}")
+[ "$target" = "$sha" ] || fail "$tag points at $target, not $sha"
+
+v=$(printf '%s' "$version" | sed 's/\./\\./g')
+grep -Eq "^## \[$v\] - [0-9]{4}-[0-9]{2}-[0-9]{2}$" CHANGELOG.md ||
+  fail "CHANGELOG.md: the $version heading is not dated"
+
+echo "verify-release-tag: $tag is a signed, annotated release tag on $sha"

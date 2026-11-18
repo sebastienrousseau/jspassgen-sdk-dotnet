@@ -1,0 +1,265 @@
+# SPDX-License-Identifier: Apache-2.0 OR MIT
+#
+# Release on a pushed `v<version>` tag, in four jobs:
+#
+# 1. check: scripts/verify-release-tag refuses the tag unless it is an
+#    annotated tag named for the csproj <Version>, with the message
+#    `jspassgen-sdk-dotnet v<version>`, signed by a key in KEYS.asc, on
+#    the checked-out commit, with a dated CHANGELOG heading. Then the
+#    `make check` gate (which packs the .nupkg and .snupkg), a CycloneDX
+#    SBOM, and SHA256SUMS over all three.
+# 2. attest: SLSA build provenance for the .nupkg and .snupkg, stored on
+#    the repository (`gh attestation verify <file> --repo <repository>`).
+# 3. publish-nuget: pushes that exact .nupkg, and its .snupkg, to
+#    nuget.org after a maintainer approves the `nuget` environment
+#    (required reviewer). NuGet trusted publishing exchanges this job's
+#    OIDC token for a short-lived API key, so no NuGet key is stored.
+#    A version already on nuget.org is skipped, so a rerun is safe.
+# 4. github-release: a draft GitHub release titled `<repository>
+#    <version>` with the packages, the SBOM and SHA256SUMS attached, and
+#    notes with What's Changed, the checksums and the Full Changelog
+#    line. The maintainer writes the Highlights and publishes the draft.
+#
+# Setup, done once by the maintainer: the `nuget` environment, the
+# NUGET_USER repository variable (the nuget.org account that owns the
+# package) and a trusted publishing policy on nuget.org naming this
+# repository, release.yml and the `nuget` environment. DEVELOPMENT.md
+# has the steps.
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  DOTNET_NOLOGO: "true"
+  DOTNET_CLI_TELEMETRY_OPTOUT: "true"
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
+
+jobs:
+  check:
+    name: Check the tag, run the gate, pack
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    outputs:
+      version: ${{ steps.tag.outputs.version }}
+      nupkg: ${{ steps.tag.outputs.nupkg }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+        with:
+          global-json-file: global.json
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+
+      - name: Check the tag (scripts/verify-release-tag)
+        id: tag
+        env:
+          TAG: ${{ github.ref_name }}
+        # The tag object itself, not only the commit it names, so the
+        # message and signature can be read.
+        run: |
+          set -euo pipefail
+          git fetch --force origin "+refs/tags/${TAG}:refs/tags/${TAG}"
+          scripts/verify-release-tag "$TAG" "$GITHUB_SHA"
+          version="${TAG#v}"
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+          echo "nupkg=Jspassgen.${version}.nupkg" >> "$GITHUB_OUTPUT"
+
+      - name: Gate (make check)
+        run: make check
+
+      - name: SBOM and checksums
+        env:
+          VERSION: ${{ steps.tag.outputs.version }}
+        run: |
+          set -euo pipefail
+          mkdir release
+          cp "artifacts/package/Jspassgen.${VERSION}.nupkg" \
+            "artifacts/package/Jspassgen.${VERSION}.snupkg" release/
+          dotnet tool restore
+          dotnet CycloneDX src/Jspassgen/Jspassgen.csproj --output release \
+            --filename "Jspassgen.${VERSION}.cdx.json" --output-format Json \
+            --set-name Jspassgen --set-version "$VERSION" --set-type Library \
+            --set-nuget-purl
+          (cd release && sha256sum -- * > SHA256SUMS && cat SHA256SUMS)
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: release
+          path: release/
+          if-no-files-found: error
+          retention-days: 30
+
+  attest:
+    name: Attest build provenance
+    needs: check
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write # sign the attestation (Sigstore)
+      attestations: write # store it on the repository
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: release
+          path: release
+
+      - uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: |
+            release/*.nupkg
+            release/*.snupkg
+
+  publish-nuget:
+    name: Publish to nuget.org
+    needs: [check, attest]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    environment: nuget
+    permissions:
+      contents: read
+      id-token: write # NuGet trusted publishing (OIDC)
+    steps:
+      # setup-dotnet reads the SDK pin from global.json, which only a
+      # checkout provides; fetch that one file.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          sparse-checkout: global.json
+          sparse-checkout-cone-mode: false
+
+      - uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+        with:
+          global-json-file: global.json
+
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: release
+          path: release
+
+      - name: Check the packages against SHA256SUMS
+        working-directory: release
+        run: sha256sum --check SHA256SUMS
+
+      - name: Skip a version already on nuget.org
+        id: registry
+        env:
+          VERSION: ${{ needs.check.outputs.version }}
+        run: |
+          set -euo pipefail
+          index=https://api.nuget.org/v3-flatcontainer/jspassgen/index.json
+          code=$(curl -sS -o versions.json -w '%{http_code}' "$index")
+          if [ "$code" = 200 ] && jq -e --arg v "$VERSION" '.versions | index($v)' versions.json >/dev/null; then
+            echo "::notice::Jspassgen ${VERSION} is already on nuget.org; nothing to publish"
+            echo "published=true" >> "$GITHUB_OUTPUT"
+          elif [ "$code" = 200 ] || [ "$code" = 404 ]; then
+            echo "published=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "::error::nuget.org answered HTTP ${code} for ${index}"
+            exit 1
+          fi
+
+      - name: Check the NUGET_USER variable
+        if: steps.registry.outputs.published == 'false'
+        env:
+          NUGET_USER: ${{ vars.NUGET_USER }}
+        run: |
+          if [ -z "$NUGET_USER" ]; then
+            echo "::error::set the NUGET_USER repository variable to the nuget.org account that owns Jspassgen"
+            exit 1
+          fi
+
+      - name: NuGet login (trusted publishing)
+        id: login
+        if: steps.registry.outputs.published == 'false'
+        uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841 # v1.2.0
+        with:
+          user: ${{ vars.NUGET_USER }}
+
+      # dotnet nuget push also pushes the .snupkg found beside the .nupkg.
+      - name: Push the package and its symbols
+        if: steps.registry.outputs.published == 'false'
+        env:
+          NUGET_API_KEY: ${{ steps.login.outputs.NUGET_API_KEY }}
+          NUPKG: ${{ needs.check.outputs.nupkg }}
+        run: |
+          dotnet nuget push "release/${NUPKG}" --api-key "$NUGET_API_KEY" \
+            --source https://api.nuget.org/v3/index.json --skip-duplicate
+
+      - name: Verify the version is public on nuget.org
+        if: steps.registry.outputs.published == 'false'
+        env:
+          VERSION: ${{ needs.check.outputs.version }}
+        # nuget.org validates and indexes a package before it can be
+        # restored, which can take several minutes, so poll before failing.
+        run: |
+          set -euo pipefail
+          index=https://api.nuget.org/v3-flatcontainer/jspassgen/index.json
+          for attempt in $(seq 1 40); do
+            if curl -fsS "$index" 2>/dev/null | jq -e --arg v "$VERSION" '.versions | index($v)' >/dev/null; then
+              echo "Jspassgen ${VERSION} is on nuget.org."
+              exit 0
+            fi
+            echo "Attempt ${attempt}: Jspassgen ${VERSION} not visible yet; retrying in 30s."
+            sleep 30
+          done
+          echo "Jspassgen ${VERSION} is still not visible on nuget.org after 20 minutes." >&2
+          exit 1
+
+  github-release:
+    name: Draft the GitHub release
+    needs: [check, publish-nuget]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write # create the draft release and upload its assets
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: release
+          path: release
+
+      - name: Create the draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+          PROJECT: ${{ github.event.repository.name }}
+          VERSION: ${{ needs.check.outputs.version }}
+        # The generated notes end with the Full Changelog line; the
+        # checksums go just before it, as the release standard orders them.
+        run: |
+          set -euo pipefail
+          gh api "repos/${REPO}/releases/generate-notes" -f tag_name="$TAG" --jq .body > generated.md
+          {
+            echo "## Highlights ⭐️"
+            echo
+            grep -v '^\*\*Full Changelog\*\*' generated.md
+            echo
+            echo "## Checksums"
+            echo
+            echo "SHA-256 of every asset attached to this release:"
+            echo
+            echo '```text'
+            cat release/SHA256SUMS
+            echo '```'
+            echo
+            grep '^\*\*Full Changelog\*\*' generated.md || true
+          } > notes.md
+          gh release create "$TAG" release/* --repo "$REPO" --draft \
+            --title "${PROJECT} ${VERSION}" --notes-file notes.md --verify-tag

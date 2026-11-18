@@ -2,8 +2,8 @@
 
 # Roadmap
 
-The current version is `0.0.22`, unreleased: the planned first jspassgen
-suite release. The order of work follows jspassgen's
+The current version is `0.0.22`, released 2026-11-18: the first
+jspassgen suite release. The order of work follows jspassgen's
 [ADR 0001](https://github.com/sebastienrousseau/jspassgen/blob/main/docs/adr/0001-ecosystem-lockstep.md).
 
 | Step | Where | Status |
@@ -13,8 +13,8 @@ suite release. The order of work follows jspassgen's
 | Vendor the kit (`conformance/`, `ci/core.ref`) and run it in CI | here | Next |
 | Port the generators in `PASSWORD_TYPES`, validation and entropy | here | After the kit is vendored |
 | Examples, benchmarks, demo, rendered manual | here | After the generators |
-| Release workflow and NuGet trusted publishing of `Jspassgen` | here | Before the first tag |
-| First suite release; status `active` in `docs/ecosystem.json` | all members | After every member passes its gate |
+| Release workflow and NuGet trusted publishing of `Jspassgen` | here | Done; first used for 0.0.22 |
+| First suite release; status `active` in `docs/ecosystem.json` | all members | 0.0.22 released; the `active` status is not set yet |
 
-Until the last row, `Jspassgen` is not on NuGet and this repository
-generates no passwords.
+`Jspassgen` 0.0.22 is on NuGet; it generates no passwords until the
+generators are ported.

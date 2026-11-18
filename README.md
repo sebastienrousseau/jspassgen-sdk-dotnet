@@ -12,7 +12,7 @@
 
 <p align="center">
   <a href="https://github.com/sebastienrousseau/jspassgen-sdk-dotnet/actions"><img src="https://img.shields.io/github/actions/workflow/status/sebastienrousseau/jspassgen-sdk-dotnet/ci.yml?style=for-the-badge&logo=github" alt="Build" height="28" /></a>
-  <a href="https://github.com/sebastienrousseau/jspassgen-sdk-dotnet/blob/main/docs/ROADMAP.md"><img src="https://img.shields.io/badge/NuGet-not%20published%20yet-lightgrey?style=for-the-badge&color=fc8d62&logo=nuget" alt="NuGet: not published yet" height="28" /></a>
+  <a href="https://www.nuget.org/packages/Jspassgen"><img src="https://img.shields.io/nuget/v/Jspassgen?style=for-the-badge&color=fc8d62&logo=nuget" alt="NuGet version" height="28" /></a>
   <a href="https://github.com/sebastienrousseau/jspassgen-sdk-dotnet/blob/main/docs/index.md"><img src="https://img.shields.io/badge/docs-in%20repository-blue?style=for-the-badge&labelColor=555555&logo=dotnet" alt="Docs" height="28" /></a>
   <a href="https://scorecard.dev/viewer/?uri=github.com/sebastienrousseau/jspassgen-sdk-dotnet"><img src="https://img.shields.io/ossf-scorecard/github.com/sebastienrousseau/jspassgen-sdk-dotnet?style=for-the-badge&label=OpenSSF%20Scorecard&logo=openssf" alt="OpenSSF Scorecard" height="28" /></a>
   <a href="LICENSE-APACHE"><img src="https://img.shields.io/badge/license-Apache--2.0%20OR%20MIT-blue.svg?style=for-the-badge" alt="License: Apache-2.0 OR MIT" height="28" /></a>
@@ -25,7 +25,7 @@
 
 **Getting started**
 
-- [Install](#install): a project reference from a checkout; NuGet `Jspassgen` is not published yet
+- [Install](#install): the NuGet package `Jspassgen`
 - [Requirements](#requirements): toolchain floor, platforms
 - [Quick Start](#quick-start): draw bytes and an unbiased integer from the CSPRNG
 
@@ -53,31 +53,18 @@
 
 ---
 
-## Development version
-
-This branch prepares unreleased v0.0.22. It is not on NuGet yet;
-reference the project from a checkout until it ships.
-
----
-
 ## Install
 
 ### As a .NET library
 
 ```xml
-<!-- Not on NuGet yet: planned for the first suite release, 0.0.22 -->
 <PackageReference Include="Jspassgen" Version="0.0.22" />
 ```
 
-The package `Jspassgen` is not published yet. It is planned to ship
-with the first jspassgen suite release, `0.0.22`, once the password
-generators are ported and pass the conformance kit. Until then, clone
-this repository and reference the project:
-
-```bash
-git clone https://github.com/sebastienrousseau/jspassgen-sdk-dotnet.git
-dotnet add <your-project>.csproj reference jspassgen-sdk-dotnet/src/Jspassgen/Jspassgen.csproj
-```
+The package `Jspassgen` is on NuGet from the first jspassgen suite
+release, `0.0.22`. This version holds the random source only; the
+password generators are ported, against the conformance kit, in a later
+version.
 
 ---
 
@@ -137,10 +124,11 @@ conformance kit as its generators land.
 | [`jspassgen-sdk-cpp`](https://github.com/sebastienrousseau/jspassgen-sdk-cpp) | Native C++17 port on the OS CSPRNG | C++ programs |
 | [`jspassgen.github.io`](https://github.com/sebastienrousseau/jspassgen.github.io) | Source of [jspassgen.com](https://jspassgen.com) | Evaluating the suite |
 
-Only `@sebastienrousseau/jspassgen` is on a package registry so far
-(0.0.21 on npm). The table gives each member's purpose; the other members
-are early, each README's Capabilities at a glance says what works today,
-and they first publish with the suite's first lockstep release.
+Every member ships at 0.0.22, the suite's first lockstep release: the
+core, CLI, MCP and LSP servers on npm, the Python, Rust, Java and .NET
+SDKs on PyPI, crates.io, Maven Central and NuGet, and the C++ SDK and
+the site as GitHub releases. The table gives each member's purpose, and
+each README's Capabilities at a glance says what works today.
 
 ---
 
@@ -148,7 +136,7 @@ and they first publish with the suite's first lockstep release.
 
 | Area | Capability | Status |
 | :--- | :--- | :--- |
-| Randomness | `IRandomSource` port, `CryptoRandomSource` over `RandomNumberGenerator`, unbiased `NextInt` | Available (unreleased) |
+| Randomness | `IRandomSource` port, `CryptoRandomSource` over `RandomNumberGenerator`, unbiased `NextInt` | Available in 0.0.22 |
 | Password types | `strong`, `base64`, `memorable`, `quantum-resistant`, `diceware`, `honeyword`, `pronounceable`, `custom`, as in the core's `PASSWORD_TYPES` | Not available yet |
 | Validation and entropy | The core's configuration validation, error codes and entropy calculation | Not available yet |
 | Conformance | jspassgen's conformance kit (draw vectors, errors, validation, entropy, EFF wordlist) vendored and run in CI | Not available yet: the kit is in jspassgen's `conformance/` but not vendored here |
@@ -200,7 +188,7 @@ generator, and each example is run in CI.
 ## When not to use jspassgen-sdk-dotnet
 
 - Do not use this version for anything but experiments: it generates no
-  passwords, is not published and may change in any way before `0.0.22`.
+  passwords, and its API may change in any later `0.0.x`.
 - Use another tool when you need secrets generated by a server or a
   shared service: this library generates locally and makes no network
   call.

@@ -2,7 +2,7 @@
 
 # jspassgen for .NET
 
-A planned native .NET port of the
+A native .NET port of the
 [jspassgen](https://github.com/sebastienrousseau/jspassgen) password and
 passphrase generator. Every random value comes from the platform CSPRNG
 on the caller's machine; nothing is sent over the network. Today the
@@ -16,8 +16,7 @@ conformance kit, which jspassgen has shipped since 0.0.21.
   [decision records](adr/index.md).
 - [Policies](POLICIES.md): minimum toolchain, versioning, output
   stability, deprecation.
-- [Roadmap](ROADMAP.md): what exists, and what comes before the first
-  release.
+- [Roadmap](ROADMAP.md): what exists, and what comes next.
 - For contributors: [Development](../DEVELOPMENT.md),
   [Contributing](../CONTRIBUTING.md), [Governance](../GOVERNANCE.md),
   [Security](../SECURITY.md), [Support](../SUPPORT.md),
