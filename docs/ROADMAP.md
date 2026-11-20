@@ -2,8 +2,9 @@
 
 # Roadmap
 
-The current version is `0.0.22`, released 2026-11-18: the first
-jspassgen suite release. The order of work follows jspassgen's
+The current version is `0.0.23`, released 2026-11-20: the jspassgen
+suite's second lockstep release, in which every member ships at
+`0.0.23`. `0.0.22`, released 2026-11-18, was the first. The order of work follows jspassgen's
 [ADR 0001](https://github.com/sebastienrousseau/jspassgen/blob/main/docs/adr/0001-ecosystem-lockstep.md).
 
 | Step | Where | Status |

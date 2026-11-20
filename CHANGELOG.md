@@ -8,6 +8,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 The version follows the jspassgen suite and moves by `0.0.1`.
 
+## [0.0.23] - 2026-11-20
+
+The suite's second lockstep release. The library's API and behaviour
+are unchanged from 0.0.22.
+
+### Added
+
+- `.github/CODEOWNERS`: every file is owned by the maintainer, whose
+  review the `main` ruleset requires.
+- FsCheck property-based tests of the random source
+  (`CryptoRandomSourceProperties`): `GetBytes` returns exactly `count`
+  bytes, `NextInt(max)` stays in [0, max) for bounds from 1 to
+  `int.MaxValue`, and both reject every argument below 1. They run
+  with the unit tests; `FsCheck.Xunit` 3.6.0 is a test-only package,
+  pinned exactly.
+
+### Changed
+
+- The version is `0.0.23`, in lockstep with the jspassgen suite.
+
 ## [0.0.22] - 2026-11-18
 
 The first release, with the first jspassgen suite release. This

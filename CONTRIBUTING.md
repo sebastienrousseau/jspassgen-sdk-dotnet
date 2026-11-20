@@ -26,6 +26,10 @@ Linux, Windows and macOS.
 - `CryptoRandomSourceTests`: the random source returns the requested
   length, stays in range, rejects arguments below 1, is uniform across
   a small range (chi-squared) and shows no modulo bias.
+- `CryptoRandomSourceProperties`: FsCheck property-based tests of the
+  same contract over generated arguments: `GetBytes` returns exactly
+  `count` bytes, `NextInt(max)` stays in [0, max) for any bound up to
+  `int.MaxValue`, and both reject every argument below 1.
 
 ## Behaviour belongs to the core
 

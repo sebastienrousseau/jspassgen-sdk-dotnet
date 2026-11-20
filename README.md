@@ -58,7 +58,7 @@
 ### As a .NET library
 
 ```xml
-<PackageReference Include="Jspassgen" Version="0.0.22" />
+<PackageReference Include="Jspassgen" Version="0.0.23" />
 ```
 
 The package `Jspassgen` is on NuGet from the first jspassgen suite
@@ -124,7 +124,7 @@ conformance kit as its generators land.
 | [`jspassgen-sdk-cpp`](https://github.com/sebastienrousseau/jspassgen-sdk-cpp) | Native C++17 port on the OS CSPRNG | C++ programs |
 | [`jspassgen.github.io`](https://github.com/sebastienrousseau/jspassgen.github.io) | Source of [jspassgen.com](https://jspassgen.com) | Evaluating the suite |
 
-Every member ships at 0.0.22, the suite's first lockstep release: the
+Every member ships at 0.0.23, the suite's second lockstep release: the
 core, CLI, MCP and LSP servers on npm, the Python, Rust, Java and .NET
 SDKs on PyPI, crates.io, Maven Central and NuGet, and the C++ SDK and
 the site as GitHub releases. The table gives each member's purpose, and
@@ -136,7 +136,7 @@ each README's Capabilities at a glance says what works today.
 
 | Area | Capability | Status |
 | :--- | :--- | :--- |
-| Randomness | `IRandomSource` port, `CryptoRandomSource` over `RandomNumberGenerator`, unbiased `NextInt` | Available in 0.0.22 |
+| Randomness | `IRandomSource` port, `CryptoRandomSource` over `RandomNumberGenerator`, unbiased `NextInt` | Available since 0.0.22 |
 | Password types | `strong`, `base64`, `memorable`, `quantum-resistant`, `diceware`, `honeyword`, `pronounceable`, `custom`, as in the core's `PASSWORD_TYPES` | Not available yet |
 | Validation and entropy | The core's configuration validation, error codes and entropy calculation | Not available yet |
 | Conformance | jspassgen's conformance kit (draw vectors, errors, validation, entropy, EFF wordlist) vendored and run in CI | Not available yet: the kit is in jspassgen's `conformance/` but not vendored here |
@@ -209,7 +209,9 @@ CI runs the format check, the build and unit tests on Linux, Windows and
 macOS with a 100 % line and branch coverage gate, the package build, the
 vulnerable-package audit, the Halstead check and the version check.
 [`DEVELOPMENT.md`](DEVELOPMENT.md) maps every target to its CI job.
-There is no fuzzing yet: the library parses no input.
+The library parses no input, so there is no fuzz harness; FsCheck
+property-based tests check the random source's contract over generated
+arguments, as part of the unit tests.
 
 ---
 
