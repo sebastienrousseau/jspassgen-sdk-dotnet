@@ -84,7 +84,7 @@ deploy workflow, and `.github/demo.tape` and `demo.gif`.
 The version is `0.0.x` and moves by `0.0.1` on `feat/v<next-version>`,
 the only pull request into `main`. This repository joins the suite at
 `0.0.22`. `.github/workflows/release.yml` releases a pushed
-`v<version>` tag; nothing has been published yet.
+`v<version>` tag; it published `Jspassgen` 0.0.22 to NuGet.
 
 1. On `feat/v<version>`: move `<Version>` in
    `src/Jspassgen/Jspassgen.csproj` and its restatements
