@@ -13,6 +13,11 @@ The version follows the jspassgen suite and moves by `0.0.1`.
 The suite's second lockstep release. The library's API and behaviour
 are unchanged from 0.0.22.
 
+### Added
+
+- `.github/CODEOWNERS`: every file is owned by the maintainer, whose
+  review the `main` ruleset requires.
+
 ### Changed
 
 - The version is `0.0.23`, in lockstep with the jspassgen suite.
