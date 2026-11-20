@@ -8,6 +8,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 The version follows the jspassgen suite and moves by `0.0.1`.
 
+## [0.0.23] - Unreleased
+
+The suite's second lockstep release. The library's API and behaviour
+are unchanged from 0.0.22.
+
+### Changed
+
+- The version is `0.0.23`, in lockstep with the jspassgen suite.
+
 ## [0.0.22] - 2026-11-18
 
 The first release, with the first jspassgen suite release. This
