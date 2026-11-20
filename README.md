@@ -124,7 +124,7 @@ conformance kit as its generators land.
 | [`jspassgen-sdk-cpp`](https://github.com/sebastienrousseau/jspassgen-sdk-cpp) | Native C++17 port on the OS CSPRNG | C++ programs |
 | [`jspassgen.github.io`](https://github.com/sebastienrousseau/jspassgen.github.io) | Source of [jspassgen.com](https://jspassgen.com) | Evaluating the suite |
 
-Every member ships at 0.0.22, the suite's first lockstep release: the
+Every member ships at 0.0.23, the suite's second lockstep release: the
 core, CLI, MCP and LSP servers on npm, the Python, Rust, Java and .NET
 SDKs on PyPI, crates.io, Maven Central and NuGet, and the C++ SDK and
 the site as GitHub releases. The table gives each member's purpose, and
@@ -136,7 +136,7 @@ each README's Capabilities at a glance says what works today.
 
 | Area | Capability | Status |
 | :--- | :--- | :--- |
-| Randomness | `IRandomSource` port, `CryptoRandomSource` over `RandomNumberGenerator`, unbiased `NextInt` | Available in 0.0.22 |
+| Randomness | `IRandomSource` port, `CryptoRandomSource` over `RandomNumberGenerator`, unbiased `NextInt` | Available since 0.0.22 |
 | Password types | `strong`, `base64`, `memorable`, `quantum-resistant`, `diceware`, `honeyword`, `pronounceable`, `custom`, as in the core's `PASSWORD_TYPES` | Not available yet |
 | Validation and entropy | The core's configuration validation, error codes and entropy calculation | Not available yet |
 | Conformance | jspassgen's conformance kit (draw vectors, errors, validation, entropy, EFF wordlist) vendored and run in CI | Not available yet: the kit is in jspassgen's `conformance/` but not vendored here |
