@@ -209,7 +209,9 @@ CI runs the format check, the build and unit tests on Linux, Windows and
 macOS with a 100 % line and branch coverage gate, the package build, the
 vulnerable-package audit, the Halstead check and the version check.
 [`DEVELOPMENT.md`](DEVELOPMENT.md) maps every target to its CI job.
-There is no fuzzing yet: the library parses no input.
+The library parses no input, so there is no fuzz harness; FsCheck
+property-based tests check the random source's contract over generated
+arguments, as part of the unit tests.
 
 ---
 

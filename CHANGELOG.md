@@ -17,6 +17,12 @@ are unchanged from 0.0.22.
 
 - `.github/CODEOWNERS`: every file is owned by the maintainer, whose
   review the `main` ruleset requires.
+- FsCheck property-based tests of the random source
+  (`CryptoRandomSourceProperties`): `GetBytes` returns exactly `count`
+  bytes, `NextInt(max)` stays in [0, max) for bounds from 1 to
+  `int.MaxValue`, and both reject every argument below 1. They run
+  with the unit tests; `FsCheck.Xunit` 3.6.0 is a test-only package,
+  pinned exactly.
 
 ### Changed
 

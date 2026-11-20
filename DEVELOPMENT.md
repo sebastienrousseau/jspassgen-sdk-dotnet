@@ -64,6 +64,7 @@ so there is no baseline.
 | Path | What it covers |
 | :--- | :--- |
 | `tests/Jspassgen.Tests/CryptoRandomSourceTests.cs` | Lengths and ranges, argument errors, chi-squared uniformity, modulo bias |
+| `tests/Jspassgen.Tests/CryptoRandomSourceProperties.cs` | FsCheck properties: exact length, [0, max) range and argument errors over generated inputs |
 
 The two statistical tests are set so a correct source fails them about
 once in a million runs (uniformity) or less (bias, a six-sigma window).
@@ -74,7 +75,8 @@ These parts of the suite standard arrive with the ported generators,
 because today they would have nothing to run: `conformance/` and
 `ci/core.ref` (the kit ships in jspassgen 0.0.21 and is vendored with
 the first generator), `examples/`, `benchmarks/`,
-`fuzz/` (the library parses no input), the rendered manual and its
+a `fuzz/` harness (the library parses no input; FsCheck property tests
+run with the unit tests instead), the rendered manual and its
 deploy workflow, and `.github/demo.tape` and `demo.gif`.
 
 ## Release model
