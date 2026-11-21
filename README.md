@@ -58,7 +58,7 @@
 ### As a .NET library
 
 ```xml
-<PackageReference Include="Jspassgen" Version="0.0.24" />
+<PackageReference Include="Jspassgen" Version="0.0.25" />
 ```
 
 The package `Jspassgen` is on NuGet from the first jspassgen suite
