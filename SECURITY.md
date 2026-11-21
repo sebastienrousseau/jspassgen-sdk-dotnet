@@ -4,16 +4,16 @@
 
 ## Supported versions
 
-This SDK follows the jspassgen suite cadence. `0.0.23`, the suite's
-second lockstep release, is the latest. While pre-`1.0`, the latest
+This SDK follows the jspassgen suite cadence. `0.0.24`, the suite's
+third lockstep release, is the latest. While pre-`1.0`, the latest
 released `0.0.x` receives security fixes; older `0.0.x` versions do
 not.
 
 | Version | Status | Receives security fixes? |
 | :--- | :--- | :--- |
-| `0.0.24` | In development, not released | Yes, once released |
-| `0.0.23` | Latest release | Yes |
-| `0.0.22` | Previous release | No |
+| `0.0.24` | Latest release | Yes |
+| `0.0.23` | Previous release | No |
+| `0.0.22` | Older release | No |
 
 ## Reporting a vulnerability
 
