@@ -8,7 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 The version follows the jspassgen suite and moves by `0.0.1`.
 
-## [0.0.24] - Unreleased
+## [0.0.24] - 2026-11-21
+
+The suite's third lockstep release. The library's API and behaviour
+are unchanged from 0.0.23.
 
 ### Added
 
@@ -19,6 +22,10 @@ The version follows the jspassgen suite and moves by `0.0.1`.
   `jspassgen-sdk-dotnet-<version>.intoto.jsonl`. Check a download with
   `gh attestation verify <file> --repo sebastienrousseau/jspassgen-sdk-dotnet`.
   This answers the OpenSSF Scorecard Signed-Releases check.
+
+### Changed
+
+- The version is `0.0.24`, in lockstep with the jspassgen suite.
 
 ## [0.0.23] - 2026-11-20
 
