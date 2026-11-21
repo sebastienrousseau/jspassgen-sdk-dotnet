@@ -8,6 +8,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 The version follows the jspassgen suite and moves by `0.0.1`.
 
+## [0.0.24] - Unreleased
+
+### Added
+
+- Releases carry their SLSA build provenance. The release workflow
+  attests every release file with `actions/attest-build-provenance`,
+  signed through Sigstore and stored as a GitHub attestation, and
+  attaches the bundle, listed in the release checksums, as
+  `jspassgen-sdk-dotnet-<version>.intoto.jsonl`. Check a download with
+  `gh attestation verify <file> --repo sebastienrousseau/jspassgen-sdk-dotnet`.
+  This answers the OpenSSF Scorecard Signed-Releases check.
+
 ## [0.0.23] - 2026-11-20
 
 The suite's second lockstep release. The library's API and behaviour

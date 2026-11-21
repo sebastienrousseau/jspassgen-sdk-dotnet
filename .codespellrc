@@ -3,3 +3,6 @@
 [codespell]
 skip = ./.git,./.venv-lint,./.venv-docs,*/bin,*/obj,./artifacts,./site,./docs/api,*.lock.json,./ci/*.txt,./LICENSES,./LICENSE-APACHE
 check-hidden = true
+# `intoto` is the in-toto attestation extension (.intoto.jsonl) the
+# release's provenance bundle must carry, not a misspelling of "into".
+ignore-words-list = intoto

@@ -11,6 +11,7 @@ not.
 
 | Version | Status | Receives security fixes? |
 | :--- | :--- | :--- |
+| `0.0.24` | In development, not released | Yes, once released |
 | `0.0.23` | Latest release | Yes |
 | `0.0.22` | Previous release | No |
 
