@@ -40,6 +40,7 @@ While pre-`1.0`, only the latest `0.0.x` receives fixes.
 
 | Version | Status | Supported |
 | :--- | :--- | :--- |
+| `0.0.25` | In development, not released | Yes, once released |
 | `0.0.24` | Latest release | Yes |
 | `0.0.23` | Previous release | No |
 | `0.0.22` | Older release | No |
